@@ -1,14 +1,13 @@
-@import '~bootstrap/scss/bootstrap.scss';
-@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
-@import './app/app.theme';
-@import 'assets/scss/main';
+@import "~bootstrap/scss/bootstrap.scss";
+@import "@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import "./app/app.theme";
+@import "assets/scss/main";
 
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
 $typography: mat-typography-config(
-  $font-family: "'Quicksand', sans-serif",
+  $font-family: "'Roboto', sans-serif",
   $input: mat-typography-level(16px, 1.125, 400),
 );
-
 @include angular-material-typography($typography);
 
 .media-dialog {
