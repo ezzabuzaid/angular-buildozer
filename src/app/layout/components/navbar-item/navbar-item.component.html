@@ -3,9 +3,9 @@
 </div>
 
 <ng-template #normalItem>
-  <a mat-button (click)="toggleNavbar()" [routerLink]="item?.routerLink" routerLinkActive="active"
-    [routerLinkActiveOptions]="{exact: true}" [queryParams]="item.queryParams"
-    class="d-flex align-items-center w-100 pointer rounded-0 navbar-item py-2 px-4" [class.py-3]="opened">
+  <a mat-button [routerLink]="item?.routerLink" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+    [queryParams]="item.queryParams" class="d-flex align-items-center w-100 pointer rounded-0 navbar-item py-2 px-4"
+    [class.py-3]="opened">
     <div class="d-flex align-items-center justify-content-between">
       <ng-container *ngTemplateOutlet="title"></ng-container>
     </div>
@@ -23,8 +23,7 @@
     <span *ngIf="item?.title" class="justify-content-start navbar-item-title w-100 d-flex align-items-center"
       [class.justify-content-md-center]="opened">
       <mat-icon matPrefix>{{item?.icon}}</mat-icon>
-      <span
-        class="mx-3 text-uppercase title drawer-invisible font-weight-bold text-dark">{{item?.title | translate}}</span>
+      <span class="mx-3 text-uppercase title drawer-invisible font-weight-bold text-dark">{{item?.title }}</span>
     </span>
     <ng-content></ng-content>
   </div>

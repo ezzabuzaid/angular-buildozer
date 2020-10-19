@@ -1,5 +1,5 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Component, HostBinding, Input, OnDestroy, OnInit, HostListener } from '@angular/core';
+import { Component, HostBinding, HostListener, Input, OnDestroy, OnInit } from '@angular/core';
 import { AppUtils } from '@core/helpers/utils';
 import { NavigationItem } from '@layout/navbar/navigation';
 import { MEDIA_BREAKPOINTS } from '@shared/common';
@@ -27,13 +27,6 @@ export class NavbarItemComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() { }
-
-  // @HostListener('click')
-  toggleNavbar() {
-    if (this.breakpointObserver.isMatched(MEDIA_BREAKPOINTS.DOWN('md'))) {
-      this.sidebarService.getSidebar(RegisterdSidebar.CHAT).close();
-    }
-  }
 
   ngOnDestroy() {
     AppUtils.unsubscribe(this.subscribtion);
