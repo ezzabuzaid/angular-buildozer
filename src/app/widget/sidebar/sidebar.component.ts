@@ -1,8 +1,8 @@
+import { isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, EventEmitter, HostBinding, Inject, Input, OnInit, Output, PLATFORM_ID } from '@angular/core';
 import { AppUtils } from '@core/helpers/utils';
 import { WINDOW } from '@shared/common';
 import { SidebarManager } from './sidebar.manager';
-import { isPlatformBrowser } from '@angular/common';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',

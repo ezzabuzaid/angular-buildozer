@@ -1,13 +1,13 @@
 import { animate, animateChild, group, query, style, transition, trigger } from '@angular/animations';
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { MEDIA_BREAKPOINTS } from '@shared/common';
 import { ChatModel } from '@shared/models';
 import { ChatService } from '@shared/services/chat';
-import { ChatCardManager, ChatGroupCardComponent, ChatConversationCardComponent } from 'app/pages/chat';
-import { SidebarManager, RegisterdSidebar } from '@widget/sidebar';
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { MEDIA_BREAKPOINTS } from '@shared/common';
-import { ChatFloatingButtonComponent } from 'app/pages/chat/chat-floating-button/chat-floating-button.component';
+import { RegisterdSidebar, SidebarManager } from '@widget/sidebar';
+import { ChatCardManager, ChatConversationCardComponent, ChatGroupCardComponent } from 'app/pages/chat';
 import { ChatCreateCardComponent } from 'app/pages/chat/chat-create-card/chat-create-card.component';
+import { ChatFloatingButtonComponent } from 'app/pages/chat/chat-floating-button/chat-floating-button.component';
 
 @Component({
   selector: 'app-container',

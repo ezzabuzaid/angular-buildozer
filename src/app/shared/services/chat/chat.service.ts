@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Constants } from '@core/constants';
+import { CACHE_DATABASE } from '@core/helpers/cache';
+import { AppUtils } from '@core/helpers/utils';
 import { ChatModel, ListEntityQuery, ListEntityResponse, PlainQuery, WriteResult } from '@shared/models';
 import { Subject } from 'rxjs';
 import { map, scan, tap } from 'rxjs/operators';
-import { AppUtils } from '@core/helpers/utils';
-import { CACHE_DATABASE } from '@core/helpers/cache';
 
 @Injectable({
     providedIn: 'root'

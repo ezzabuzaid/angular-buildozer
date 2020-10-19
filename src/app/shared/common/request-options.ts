@@ -28,10 +28,10 @@ export interface IRequestOptions {
     FULL_RESPONSE: boolean;
 
     /**
-    * Configure the request to be cached
-    * 
-    * if undefined/null or not setted the request will not be cached
-    */
+     * Configure the request to be cached
+     *
+     * if undefined/null or not setted the request will not be cached
+     */
     CACHE: {
         /**
         * Name of the object store that will be used to save the response
@@ -41,5 +41,5 @@ export interface IRequestOptions {
         category?: string;
         // provider: InjectionToken<AsyncStorage>;
         ttl?: number;
-    }
+    };
 }

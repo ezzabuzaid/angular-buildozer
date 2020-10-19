@@ -5,14 +5,17 @@ import { AsyncDatabase, IndexedDB } from '@ezzabuzaid/document-storage';
 import { RequestOptionsModule } from '@ezzabuzaid/ngx-request-options';
 import { IRequestOptions } from '@shared/common';
 import { CACHE_DATABASE } from './helpers/cache';
-import {
-  CacheInterceptor,
-  LoggerInterceptor,
-  ProgressInterceptor,
-  SetupInterceptor,
-  TeardownInterceptor, UniversalInterceptor, UrlInterceptor
-} from './interceptors';
 import { AppUtils } from './helpers/utils';
+import { CacheInterceptor } from './interceptors/cache/cache.interceptor';
+import { CancellationInterceptor } from './interceptors/cancellation/cancellation.interceptor';
+import { ConnectivityInterceptor } from './interceptors/connectivity/connectivity.interceptor';
+import { LoggerInterceptor } from './interceptors/logger.interceptor';
+import { MapperInterceptor } from './interceptors/mapper/mapper.interceptor';
+import { ProgressInterceptor } from './interceptors/progress/progress.interceptor';
+import { TeardownInterceptor } from './interceptors/teardown/teardown.interceptor';
+import { UniversalInterceptor } from './interceptors/universal/universal.interceptor';
+import { UrlInterceptor } from './interceptors/url/url.interceptor';
+
 
 @NgModule({
   imports: [
@@ -42,7 +45,12 @@ import { AppUtils } from './helpers/utils';
     },
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: SetupInterceptor,
+      useClass: ConnectivityInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MapperInterceptor,
       multi: true
     },
     {
@@ -55,7 +63,11 @@ import { AppUtils } from './helpers/utils';
       useClass: UrlInterceptor,
       multi: true
     },
-
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CancellationInterceptor,
+      multi: true
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: UniversalInterceptor,

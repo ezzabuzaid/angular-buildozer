@@ -217,8 +217,8 @@ export class AppUtils {
     }
 
     /**
-    * Convert minutes to seconds
-    */
+     * Convert minutes to seconds
+     */
     static minutesToSeconds(minutes: number) {
         const d = new Date();
         const a = new Date();
