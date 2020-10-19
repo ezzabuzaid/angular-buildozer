@@ -25,7 +25,7 @@ A better document will be available soon, with inclusive demonstrations about th
 
 * @Pages
 
-    Any module that will be complete page and not part of another page
+    Any module that will be complete page and not part of another page and typically it will include routing module
 
 * @Partials
 
@@ -56,6 +56,15 @@ A better document will be available soon, with inclusive demonstrations about th
 
 * Widget/gmap is no longer maintained, I'll keep it as reference
 * Widget/dialog is no longer maintained, you can use it to create custom dialog
+
+## Development
+
+* Add Page
+1. scaffold new module, `ng g m pages/{page-name}`
+2. specify your page route name constant in `core/constants/routes.contants`
+2. add the module to route declarations in `layout-routing.module`
+3. add new navigation item in `layout/navbar/navigation`
+
 
 ## Summary
 

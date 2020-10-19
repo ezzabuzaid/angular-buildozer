@@ -3,10 +3,9 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpCacheHelper } from '@core/helpers/cache';
 import { Logger } from '@core/helpers/logger';
 import { AppUtils } from '@core/helpers/utils';
-import { RequestOptions } from '@ezzabuzaid/ngx-request-options';
-import { REQUEST_OPTIONS_DEFAULT } from '@ezzabuzaid/ngx-request-options';
+import { RequestOptions, REQUEST_OPTIONS_DEFAULT } from '@ezzabuzaid/ngx-request-options';
 import { IRequestOptions } from '@shared/common';
-import { from, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 const log = new Logger('CacheInterceptor');
 @Injectable()
