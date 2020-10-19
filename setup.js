@@ -1,5 +1,15 @@
 const fs = require('fs');
+const cheerio = require('cheerio');
+const $ = indexHtml();
+
 const [, , name, title] = process.argv;
+
+// SECTION: Setup Index.html
+$('title').text(title);
+$('meta[name="application-name"]').attr('content', title);
+$('meta[name="apple-mobile-web-app-title"]').attr('content', title);
+
+fs.writeFileSync('./src/index.html', $.html());
 
 // SECTION: Setup Angular json
 let angularJsonContent = fs.readFileSync('angular.json', { encoding: 'utf8' });
@@ -38,3 +48,10 @@ fs.writeFileSync('src/assets/i18n/en.json', enI18n);
 let arI18n = fs.readFileSync('src/assets/i18n/ar.json', { encoding: 'utf8' });
 arI18n = `{"application_name":"${title || name}"}`
 fs.writeFileSync('src/assets/i18n/ar.json', arI18n);
+
+
+
+function indexHtml() {
+    const data = fs.readFileSync('./src/index.html', 'utf8');
+    return cheerio.load(data);
+}
