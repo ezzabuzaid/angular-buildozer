@@ -69,7 +69,7 @@ export class TokenHelper {
   }
 
   public get isAuthenticated() {
-    return this.isLogged && AppUtils.not(this.isExpired);
+    return this.isLogged;
   }
 
 }

@@ -14,6 +14,8 @@ declare const biri: () => Promise<string>;
 @Injectable({
   providedIn: 'root'
 })
+
+// FIXME: move it to models and the functions to auth.service // See FiberRush 
 export class ApplicationUser extends SubjectFactory<boolean> {
 
   constructor(
@@ -105,5 +107,9 @@ export class ApplicationUser extends SubjectFactory<boolean> {
 
   get isBrowser() {
     return isPlatformBrowser(this.platformId);
+  }
+
+  get isAuthenticated() {
+    return this.tokenHelper.isAuthenticated;
   }
 }

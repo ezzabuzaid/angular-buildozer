@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import {
+  ActivatedRoute,
   ActivatedRouteSnapshot, CanActivate, CanActivateChild, CanLoad,
-  Route, RouterStateSnapshot,
+  Route, Router, RouterStateSnapshot,
 
 
 
@@ -10,7 +11,8 @@ import {
 import { ApplicationUser } from '@core/application-user';
 import { Logger } from '@core/helpers/logger';
 import { TokenHelper } from '@core/helpers/token';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { catchError, mapTo } from 'rxjs/operators';
 const logger = new Logger('AppGuard');
 @Injectable({
   providedIn: 'root'
@@ -18,7 +20,9 @@ const logger = new Logger('AppGuard');
 export class AppGuard implements CanActivate, CanLoad, CanActivateChild {
   constructor(
     private tokenHelper: TokenHelper,
-    private applicationUser: ApplicationUser
+    private applicationUser: ApplicationUser,
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   canActivate(
@@ -29,7 +33,7 @@ export class AppGuard implements CanActivate, CanLoad, CanActivateChild {
   }
 
   canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
-    const path = segments.reduce((accumlator, currentSegment) => `${ accumlator }/${ currentSegment.path }`, '');
+    const path = this.router.getCurrentNavigation().extractedUrl.toString();
     return this.authenticate(path);
   }
 
@@ -38,12 +42,14 @@ export class AppGuard implements CanActivate, CanLoad, CanActivateChild {
     return this.authenticate(state.url);
   }
 
-
   public authenticate(redirectUrl?) {
-    if (!this.tokenHelper.isAuthenticated) {
-      this.applicationUser.logout(redirectUrl);
-      return false;
+    if (this.tokenHelper.isAuthenticated) {
+      if (this.tokenHelper.isExpired) {
+        return this.applicationUser.refreshToken().pipe(catchError(() => of(false)), mapTo(true));
+      }
+      return of(true);
     }
-    return true;
+    this.applicationUser.logout(redirectUrl);
+    return of(false);
   }
 }

@@ -38,8 +38,6 @@ export interface IRequestOptions {
 interface ICacheOption {
     /**
      * Name of the object store that will be used to save the response
-     *
-     * requires LOCAL_CACHE to be true
      */
     category?: string;
     // provider: InjectionToken<AsyncStorage>;
