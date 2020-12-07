@@ -1,5 +1,5 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core';
+import { AfterViewInit, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core';
 import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
 import { ApplicationUser } from '@core/application-user';
 import { ELanguage, LanguageService } from '@core/helpers/language';
@@ -14,13 +14,13 @@ import { AnalyticsService } from '@shared/services/analytics';
 import { SeoService } from '@shared/services/seo/seo.service';
 import { partition } from 'rxjs';
 import { filter, switchMap, tap } from 'rxjs/operators';
-
+import { Resizable } from "./resizeable";
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private readonly languageService: LanguageService,
@@ -45,6 +45,16 @@ export class AppComponent implements OnInit, OnDestroy {
       keywords: ['angular', 'ezzabuzaid', 'buildozer', 'boilerplate', 'angular starter', 'seed', 'angular seed'].join(',')
     });
 
+  }
+  ngAfterViewInit(): void {
+    new Resizable(document.querySelector('.child'), {
+      // resizer: this.resizer,
+      // maxWidthThreshold: -200,
+      // minWidthThreshold: 100,
+      axis: 'horizontal',
+      position: 'negative',
+      bounded: true
+    })
   }
 
   ngOnInit() {
@@ -71,16 +81,16 @@ export class AppComponent implements OnInit, OnDestroy {
     if (this.isBrowser) {
       this.languageService.populate(ELanguage.EN);
 
-      this.applicationUser.listen()
-        .pipe(filter(() => this.tokenHelper.isLogged))
-        .subscribe(() => {
-          if (AppUtils.not(this.tokenHelper.decodedToken.verified)) {
-            this.snackbar.open('Please verify your account', 'Send Email', { duration: Number.MAX_VALUE })
-              .onAction()
-              .pipe(switchMap(() => this.applicationUser.sendVerificationEmail()))
-              .subscribe();
-          }
-        });
+      // this.applicationUser.listen()
+      //   .pipe(filter(() => this.tokenHelper.isLogged))
+      //   .subscribe(() => {
+      //     if (AppUtils.not(this.tokenHelper.decodedToken.verified)) {
+      //       this.snackbar.open('Please verify your account', 'Send Email', { duration: Number.MAX_VALUE })
+      //         .onAction()
+      //         .pipe(switchMap(() => this.applicationUser.sendVerificationEmail()))
+      //         .subscribe();
+      //     }
+      //   });
 
       // TODO PWA Checks if install popup should be appear
       const isIos = () => /iphone|ipad|ipod/.test(this.navigator.userAgent.toLowerCase());

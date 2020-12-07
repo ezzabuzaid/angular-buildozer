@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "postinstall": "npm run build:ssr",
+    "postinstall": "ngcc && npm run build:ssr",
     "pre-e2e": "webdriver-manager update --standalone false --gecko false",
     "docs": "compodoc -p src/tsconfig.app.json -d docs",
     "docs:serve": "compodoc -p src/tsconfig.app.json -d docs -s",

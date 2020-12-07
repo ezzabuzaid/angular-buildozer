@@ -47,14 +47,14 @@ export class UploadsService {
 
     getUserFolders() {
         return this.http
-            .configure({ LOCAL_CACHE: false })
+            .configure({ CACHE: null })
             .get<ListEntityResponse<MediaModel.Folder>>(`${ Constants.API.UPLOADS.folders }/user`)
             .pipe(map(({ list }) => list));
     }
 
     getSharedFolders() {
         return this.http
-            .configure({ LOCAL_CACHE: false })
+            .configure({ CACHE: null })
             .get<ListEntityResponse<MediaModel.Folder>>(`${ Constants.API.UPLOADS.folders }/user/shared`)
             .pipe(map(({ list }) => list));
     }
@@ -70,7 +70,7 @@ export class UploadsService {
 
     getTags() {
         return this.http
-            .configure({ LOCAL_CACHE: true })
+            .configure({ CACHE: {} })
             .get<MediaModel.Tag[]>(`${ Constants.API.UPLOADS.tags }`);
     }
 
