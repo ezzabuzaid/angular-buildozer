@@ -88,7 +88,7 @@ export class ApplicationUser extends SubjectFactory<boolean> {
       });
       this.navigator.sendBeacon(`${ environment.endpointUrl }${ Constants.API.PORTAL.logout }`, blob);
     }
-    this.router.navigateByUrl(Constants.Routing.LOGIN.withSlash, {
+    this.router.navigate([Constants.Routing.LOGIN.withSlash], {
       queryParams: {
         [Constants.Application.REDIRECT_URL]: redirectUrl ?? undefined
       }
