@@ -15,7 +15,7 @@ declare const biri: () => Promise<string>;
   providedIn: 'root'
 })
 
-// FIXME: move it to models and the functions to auth.service // See FiberRush 
+// FIXME: move it to models and the functions to auth.service // See FiberRush
 export class ApplicationUser extends SubjectFactory<boolean> {
 
   constructor(

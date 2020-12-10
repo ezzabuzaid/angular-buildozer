@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ChatCardMessagesComponent } from './chat-card-messages.component';
 
@@ -6,7 +6,7 @@ describe('ChatCardMessagesComponent', () => {
   let component: ChatCardMessagesComponent;
   let fixture: ComponentFixture<ChatCardMessagesComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ChatCardMessagesComponent ]
     })

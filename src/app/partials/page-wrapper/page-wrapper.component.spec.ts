@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PageWrapperComponent } from './page-wrapper.component';
 
@@ -6,7 +6,7 @@ describe('PageWrapperComponent', () => {
   let component: PageWrapperComponent;
   let fixture: ComponentFixture<PageWrapperComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ PageWrapperComponent ]
     })

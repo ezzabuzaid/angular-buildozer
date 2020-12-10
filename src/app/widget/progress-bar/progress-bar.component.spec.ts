@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MaterialModule } from '@shared/common';
@@ -12,7 +12,7 @@ describe('ProgressBarComponent', () => {
   let component: ProgressBarComponent;
   let testUtility: TestUtility<ProgressBarComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ProgressBarComponent],
       imports: [MaterialModule]

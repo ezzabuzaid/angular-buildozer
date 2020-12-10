@@ -14,7 +14,7 @@ import { AnalyticsService } from '@shared/services/analytics';
 import { SeoService } from '@shared/services/seo/seo.service';
 import { partition } from 'rxjs';
 import { filter, switchMap, tap } from 'rxjs/operators';
-import { Resizable } from "./resizeable";
+import { Resizable } from './resizeable';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -54,7 +54,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       axis: 'horizontal',
       position: 'negative',
       bounded: true
-    })
+    });
   }
 
   ngOnInit() {

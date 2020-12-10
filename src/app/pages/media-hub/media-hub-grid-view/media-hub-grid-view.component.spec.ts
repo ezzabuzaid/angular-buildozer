@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { MediaHubGridViewComponent } from './media-hub-grid-view.component';
 
@@ -6,7 +6,7 @@ describe('MediaHubGridViewComponent', () => {
   let component: MediaHubGridViewComponent;
   let fixture: ComponentFixture<MediaHubGridViewComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ MediaHubGridViewComponent ]
     })

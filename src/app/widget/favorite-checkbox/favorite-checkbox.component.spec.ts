@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
@@ -10,7 +10,7 @@ describe('FavoriteCheckboxComponent', () => {
   let component: FavoriteCheckboxComponent;
   let testUtility: TestUtility<FavoriteCheckboxComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [FavoriteCheckboxComponent],
       imports: [MaterialModule]

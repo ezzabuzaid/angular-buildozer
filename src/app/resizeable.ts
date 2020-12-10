@@ -9,7 +9,7 @@ interface IResizableOptions {
     axis: 'horizontal' | 'vertical' | 'both';
     /**
      * Position of the resizer element
-     * 
+     *
      * axis === 'horizontal' && position === 'positive' = right edge
      * axis === 'horizontal' && position === 'negative' = left edge
      * axis === 'horizontal' && position === 'hyber' = both edges
@@ -21,7 +21,7 @@ interface IResizableOptions {
      * axis === 'both' && position === 'positive' = right and top edges
      * axis === 'both' && position === 'negative' = bottom and left edges
      * axis === 'both' && position === 'hyber' = all edges
-     * 
+     *
      */
     position: 'positive' | 'negative' | 'hyber';
     bounded: boolean | HTMLElement;
@@ -29,7 +29,7 @@ interface IResizableOptions {
     maxWidthThreshold?: number | string;
     minWidthThreshold?: number | string;
     minHeightThreshold?: number | string;
-    maxHeightThreshold?: number | string
+    maxHeightThreshold?: number | string;
     maxWidthExceeded?();
     minWidthExceeded?();
 }
@@ -38,28 +38,45 @@ export class Resizable {
     private cursorDirections = {
         left: 'w-resize',
         right: 'e-resize'
-    }
+    };
     private resizing = false;
     lastXvalue = 0;
     lastYvalue = 0;
     direction: Direction;
 
+    constructor(
+        private element: HTMLElement,
+        private options?: IResizableOptions
+    ) {
+        if (this.options.axis === 'horizontal') {
+            const position = this.options.position === 'positive' ? 'right' : 'left';
+            options.resizer = this.makeResizer(position);
+        }
+        this.element.style.setProperty('position', 'relative');
+        this.element.appendChild(options.resizer);
+        // this.element.style.setProperty('resize', this.options.axis);
+        this.element.style.setProperty('max-width', this.boundries().maxX() + 'px');
+        this.element.style.setProperty('min-width', this.boundries().minX() + 'px');
+
+        this.attachEvents(options.resizer);
+    }
+
     private trackMouseDirection(event): Direction {
-        let direction: Direction = null;
+        const direction: Direction = null;
         if (event.pageX > this.lastXvalue && event.pageY > this.lastYvalue) {
             this.direction = 'bottom_right';
         }
         if (event.pageX > this.lastXvalue && event.pageY == this.lastYvalue) {
-            this.direction = "right";
+            this.direction = 'right';
         }
         else if (event.pageX == this.lastXvalue && event.pageY > this.lastYvalue) {
-            this.direction = "bottom";
+            this.direction = 'bottom';
         }
         else if (event.pageX == this.lastXvalue && event.pageY < this.lastYvalue) {
-            this.direction = "top";
+            this.direction = 'top';
         }
         else if (event.pageX < this.lastXvalue && event.pageY == this.lastYvalue) {
-            this.direction = "left";
+            this.direction = 'left';
         }
         this.lastXvalue = event.pageX;
         this.lastYvalue = event.pageY;
@@ -87,23 +104,6 @@ export class Resizable {
             () => resizer.style.setProperty('background-color', 'transparent'),
         );
         return resizer;
-    }
-
-    constructor(
-        private element: HTMLElement,
-        private options?: IResizableOptions
-    ) {
-        if (this.options.axis === 'horizontal') {
-            let position = this.options.position === 'positive' ? 'right' : 'left';
-            options.resizer = this.makeResizer(position);
-        }
-        this.element.style.setProperty('position', 'relative');
-        this.element.appendChild(options.resizer);
-        // this.element.style.setProperty('resize', this.options.axis);
-        this.element.style.setProperty('max-width', this.boundries().maxX() + 'px');
-        this.element.style.setProperty('min-width', this.boundries().minX() + 'px');
-
-        this.attachEvents(options.resizer);
     }
 
     private attachEvents(element: HTMLElement) {
@@ -264,7 +264,7 @@ export class Resizable {
                 return maxWidth + this.formatOffsetValue(String(this.options.maxWidthThreshold));
             },
             minX: () => {
-                let minWidth = this.getHostOffset('minWidth');
+                const minWidth = this.getHostOffset('minWidth');
                 return minWidth + this.formatOffsetValue(String(this.options.minWidthThreshold));
             },
             maxY: () => {
@@ -279,10 +279,10 @@ export class Resizable {
                 return maxHeight + this.formatOffsetValue(String(this.options.maxHeightThreshold));
             },
             minY: () => {
-                let minHeight = this.getHostOffset('minHeight');
+                const minHeight = this.getHostOffset('minHeight');
                 return minHeight + this.formatOffsetValue(String(this.options.minHeightThreshold));
             },
-        }
+        };
     }
 
     private formatOffsetValue(width: string): number {

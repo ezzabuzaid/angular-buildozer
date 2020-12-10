@@ -1,4 +1,4 @@
-import { async, fakeAsync, flush, TestBed } from '@angular/core/testing';
+import { fakeAsync, flush, TestBed, waitForAsync } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -17,7 +17,7 @@ fdescribe('LoginComponent', () => {
     let component: LoginComponent;
     let testUtility: TestUtility<LoginComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
 
         TestBed.configureTestingModule({
             declarations: [

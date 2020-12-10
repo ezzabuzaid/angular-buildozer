@@ -1,20 +1,69 @@
-/*
-  This is a "Solution Style" tsconfig.json file, and is used by editors and TypeScript’s language server to improve development experience.
-  It is not intended to be used to perform a compilation.
-
-  To learn more about this file see: https://angular.io/config/solution-tsconfig.
-*/
 {
-  "files": [],
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "src",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "module": "es2020",
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "suppressImplicitAnyIndexErrors": true,
+    "pretty": true,
+    "strictBindCallApply": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "downlevelIteration": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "paths": {
+      "@core/*": [
+        "app/core/*"
+      ],
+      "@shared/*": [
+        "app/shared/*"
+      ],
+      "@widget/*": [
+        "app/widget/*"
+      ],
+      "@partials/*": [
+        "app/partials/*"
+      ],
+      "@layout/*": [
+        "app/layout/*"
+      ],
+      "@environments/*": [
+        "environments/*"
+      ]
     },
-    {
-      "path": "./tsconfig.server.json"
-    },
-    {
-      "path": "./tsconfig.spec.json"
-    }
+    "lib": [
+      "es2018",
+      "dom"
+    ]
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "src/test/*/**"
+  ],
+  "angularCompilerOptions": {
+    "strictTemplates": true,
+    "strictInjectionParameters": true,
+    "trace": true,
+    "debug": true
+  },
+  "files": [
+    "server.ts"
   ]
 }
