@@ -1,9 +1,15 @@
+
 type Direction = 'right' | 'bottom' | 'top' | 'left' | 'bottom_right';
+type Position = 'positive' | 'negative' | 'hyber';
 interface Point {
     x: number;
     y: number;
 }
 
+interface IResizer {
+    element: HTMLElement;
+    status?: 'on' | 'off';
+}
 
 interface IResizableOptions {
     axis: 'horizontal' | 'vertical' | 'both';
@@ -23,9 +29,9 @@ interface IResizableOptions {
      * axis === 'both' && position === 'hyber' = all edges
      *
      */
-    position: 'positive' | 'negative' | 'hyber';
+    position: Position;
     bounded: boolean | HTMLElement;
-    resizer?: HTMLElement;
+    // resizer?: HTMLElement;
     maxWidthThreshold?: number | string;
     minWidthThreshold?: number | string;
     minHeightThreshold?: number | string;
@@ -35,68 +41,77 @@ interface IResizableOptions {
 }
 
 export class Resizable {
-    private cursorDirections = {
-        left: 'w-resize',
-        right: 'e-resize'
-    };
     private resizing = false;
     lastXvalue = 0;
     lastYvalue = 0;
-    direction: Direction;
+    cursorDirection: Direction;
+    private resizers = new Map<'left' | 'top' | 'right' | 'bottom', IResizer>();
+    private connectResizer(position: Position) {
+        const direction = position === 'positive' ? 'right' : 'left';
+        const resizer = this.makeResizer(direction);
+        this.resizers.set(direction, { element: resizer });
+        this.element.appendChild(resizer);
+        this.attachEvents(resizer);
+    }
 
     constructor(
         private element: HTMLElement,
         private options?: IResizableOptions
     ) {
         if (this.options.axis === 'horizontal') {
-            const position = this.options.position === 'positive' ? 'right' : 'left';
-            options.resizer = this.makeResizer(position);
+            if (this.options.position === 'hyber') {
+                (<Position[]>['positive', 'negative']).forEach(position => {
+                    this.connectResizer(position);
+                });
+            } else {
+                this.connectResizer(this.options.position);
+            }
         }
         this.element.style.setProperty('position', 'relative');
-        this.element.appendChild(options.resizer);
-        // this.element.style.setProperty('resize', this.options.axis);
         this.element.style.setProperty('max-width', this.boundries().maxX() + 'px');
         this.element.style.setProperty('min-width', this.boundries().minX() + 'px');
 
-        this.attachEvents(options.resizer);
     }
 
     private trackMouseDirection(event): Direction {
         const direction: Direction = null;
         if (event.pageX > this.lastXvalue && event.pageY > this.lastYvalue) {
-            this.direction = 'bottom_right';
+            this.cursorDirection = 'bottom_right';
         }
         if (event.pageX > this.lastXvalue && event.pageY == this.lastYvalue) {
-            this.direction = 'right';
+            this.cursorDirection = 'right';
         }
         else if (event.pageX == this.lastXvalue && event.pageY > this.lastYvalue) {
-            this.direction = 'bottom';
+            this.cursorDirection = 'bottom';
         }
         else if (event.pageX == this.lastXvalue && event.pageY < this.lastYvalue) {
-            this.direction = 'top';
+            this.cursorDirection = 'top';
         }
         else if (event.pageX < this.lastXvalue && event.pageY == this.lastYvalue) {
-            this.direction = 'left';
+            this.cursorDirection = 'left';
         }
         this.lastXvalue = event.pageX;
         this.lastYvalue = event.pageY;
         return direction;
     }
 
-    private updateResizerCursor(event) {
-        this.options.resizer.style.setProperty('cursor', this.cursorDirections[this.direction]);
-    }
+    // private updateResizerCursor(event) {
+    //     this.options.resizer.style.setProperty('cursor', this.cursorDirections[this.direction]);
+    // }
 
-    private makeResizer(position) {
+    private makeResizer(direction: 'right' | 'left') {
         const resizer = document.createElement('div');
         const cssText = `
             position: absolute;cursor: ew-resize;display: block;
             height: 100%;width: 3px;background-color: transparent;z-index: 0;
+            top:0;
         `;
+        const rect = this.element.getBoundingClientRect();
         resizer.style.cssText = cssText;
-        resizer.style.setProperty('left', `${ this.element.offsetLeft }px`);
-        resizer.style.setProperty('height', `${ this.element.offsetHeight }px`);
-        resizer.style.setProperty(position, `${ 0 - resizer.clientWidth }px`);
+        resizer.style.setProperty(direction, `${ 0 - resizer.clientWidth }px`);
+        // resizer.style.setProperty(direction, `${ window.innerWidth - rect.right - resizer.clientWidth }px`);
+        // resizer.style.setProperty('height', `${ this.element.offsetHeight }px`);
+        // resizer.style.setProperty('top', rect.top + 'px');
 
         hover(
             resizer,
@@ -178,47 +193,85 @@ export class Resizable {
         if (!this.resizing) {
             return;
         }
-        if (
-            (
-                this.element.offsetWidth >= this.boundries().maxX()
-                &&
-                this.direction !== 'left'
-            )
-            ||
-            (
-                this.element.offsetWidth <= this.boundries().minX()
-                &&
-                this.direction !== 'right'
-            )
-        ) {
-            return;
-        }
+        // if (
+        //     (
+        //         this.element.offsetWidth >= this.boundries().maxX()
+        //         &&
+        //         this.cursorDirection !== 'left'
+        //     )
+        //     ||
+        //     (
+        //         this.element.offsetWidth <= this.boundries().minX()
+        //         &&
+        //         this.cursorDirection !== 'right'
+        //     )
+        // ) {
+        //     return;
+        // }
 
-        if (this.element.offsetWidth >= this.boundries().maxX()) {
-            this.element.style.setProperty('width', `${ this.element.offsetWidth - 10 }px`);
-            return;
-        }
+        // if (this.element.offsetWidth >= this.boundries().maxX()) {
+        //     this.element.style.setProperty('width', `${ this.element.offsetWidth - 10 }px`);
+        //     return;
+        // }
 
-        const vector = this.getVector(evt);
+        const point = this.getPoint(evt);
+
+
         if (this.options.axis === 'horizontal') {
-            const offset = this.element.offsetWidth - vector.x;
-            console.log(offset);
-            this.element.style.setProperty('width', `${ vector.x }px`);
-            this.element.style.setProperty('left', `${ vector.x }px`);
+            switch (this.options.position) {
+                case 'positive':
+                    this.moveXPositive(point.x);
+                    break;
+                case 'negative':
+                    this.moveXNegative(point.x);
+                    break;
+                default:
+                    const direction = ['left', 'right', 'top', 'bottom'].find(direction => evt.srcElement.style.getPropertyValue(direction));
+                    switch (direction) {
+                        case 'right':
+                            this.moveXPositive(point.x);
+                            break;
+                        case 'left':
+                            this.moveXNegative(point.x);
+                            break;
+
+                        default:
+                            break;
+                    }
+                    break;
+            }
         }
+
         if (this.options.axis === 'vertical') {
-            this.element.style.setProperty('height', `${ this.element.offsetHeight - vector.y }px`);
+            this.element.style.setProperty('height', `${ this.element.offsetHeight - point.y } px`);
         }
 
         if (this.options.axis === 'both') {
-            this.element.style.setProperty('width', `${ this.element.offsetWidth - vector.x }px`);
-            this.element.style.setProperty('height', `${ this.element.offsetHeight - vector.y }px`);
+            this.element.style.setProperty('width', `${ this.element.offsetWidth - point.x } px`);
+            this.element.style.setProperty('height', `${ this.element.offsetHeight - point.y } px`);
         }
     }
 
-    private getVector(evt): Point {
+    private moveXPositive(offset: number) {
+        this.element.style.setProperty('width', `${ offset }px`);
+    }
+    private moveXNegative(offset: number) {
+        const rect = this.element.getBoundingClientRect();
+        const originalWidth = rect.right - this.element.offsetLeft;
+        const width = originalWidth - offset;
+        this.element.style.setProperty('width', `${ width }px`);
+
+        // const right = this.boundries().maxX() - width;
+        const right = this.element.getBoundingClientRect().right - this.element.getBoundingClientRect().x - window.innerWidth;
+        console.log(right, '___', width);
+        // if(offset>1)
+        if (width > this.boundries().minX()) {
+            this.element.style.setProperty('right', `-${ right }px`);
+        }
+    }
+
+    private getPoint(evt): Point {
         const point = { x: evt.x, y: evt.y };
-        console.log(point);
         let element = this.element;
         let maxOffsetLeft = 0;
         let maxOffsetTop = 0;
@@ -228,22 +281,15 @@ export class Resizable {
             element = element.offsetParent as HTMLElement;
         }
 
-        // let x = point.x - maxOffsetLeft;
-        // let y = point.y - maxOffsetTop;
+        // Remove the initial jumb 
+        point.x -= maxOffsetLeft;
+        // point.y -= maxOffsetTop;
+
         // x = (this.options.position === 'positive') ? this.element.offsetWidth - x : x;
         return {
             x: point.x,
             y: null
         };
-    }
-
-    private pxToPercentege(pixels: number) {
-        const screenWidth = window.screen.width;
-        return pixels / screenWidth * 100;
-    }
-
-    private percentegeToPx(percentge: number) {
-        return percentge * this.options.resizer.clientWidth / 100;
     }
 
     private getHostOffset(property: keyof CSSStyleDeclaration) {
@@ -288,7 +334,8 @@ export class Resizable {
     private formatOffsetValue(width: string): number {
         let value = width as any;
         if (width.includes('%')) {
-            value = this.percentegeToPx(+width.replace('%', ''));
+            const percentge = +width.replace('%', '');
+            value = percentge * this.element.clientWidth / 100
         } else if (width.includes('px')) {
             value = +width.replace('px', '');
         }
@@ -311,4 +358,9 @@ function hover(
 ) {
     element.addEventListener('mouseenter', () => enter());
     element.addEventListener('mouseleave', () => leave());
+}
+
+function pxToPercentege(pixels: number) {
+    const screenWidth = window.screen.width;
+    return pixels / screenWidth * 100;
 }

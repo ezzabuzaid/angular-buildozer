@@ -12,6 +12,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Connectivity, NAVIGATOR } from '@shared/common';
 import { AnalyticsService } from '@shared/services/analytics';
 import { SeoService } from '@shared/services/seo/seo.service';
+import { PopupManager } from '@widget/popup';
 import { partition } from 'rxjs';
 import { filter, switchMap, tap } from 'rxjs/operators';
 import { Resizable } from './resizeable';
@@ -36,6 +37,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly applicationUser: ApplicationUser,
     private readonly tokenHelper: TokenHelper,
     private translateService: TranslateService,
+    private popup: PopupManager
   ) {
     this.renderer.addClass(this.document.body, 'default-theme');
     this.seoService.populate({
@@ -47,13 +49,21 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
   ngAfterViewInit(): void {
-    new Resizable(document.querySelector('.child'), {
-      // resizer: this.resizer,
-      // maxWidthThreshold: -200,
-      // minWidthThreshold: 100,
-      axis: 'horizontal',
-      position: 'negative',
-      bounded: true
+    setTimeout(() => {
+      this.popup.alert({
+        data: {
+          description: 'lorem',
+          title: 'Title'
+        }
+      })
+      new Resizable(document.querySelector('mat-dialog-container'), {
+        // resizer: this.resizer,
+        // maxWidthThreshold: -200,
+        minWidthThreshold: 200,
+        axis: 'horizontal',
+        position: 'hyber',
+        bounded: true
+      });
     });
   }
 
