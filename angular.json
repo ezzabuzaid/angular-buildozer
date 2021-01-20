@@ -22,6 +22,10 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "socket.io-client",
+              "@ezzabuzaid/document-storage"
+            ],
             "preserveSymlinks": true,
             "aot": true,
             "sourceMap": true,
@@ -133,8 +137,7 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "buildozer:build",
-            "aot": true
+            "browserTarget": "buildozer:build"
           },
           "configurations": {
             "production": {
