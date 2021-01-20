@@ -1,14 +1,13 @@
-<h5 *ngIf="data.title" mat-dialog-title>{{ (data.title | translate) }}</h5>
-<mat-divider></mat-divider>
-<div mat-dialog-content>
-  <p *ngIf="data.description">{{ data.description }}</p>
-  <mat-form-field cdkFocusInitial appearance="fill">
-    <input (keyup.enter)="close()" [(ngModel)]="data.value" required type="text" matInput>
-  </mat-form-field>
-</div>
-<mat-divider></mat-divider>
-<div mat-dialog-actions class="justify-content-end">
-  <button color="accent" type="button" class="w-25" mat-stroked-button (click)="close()">
-    {{ (data.confirm || 'button_confirm') | translate }}
+<div class="d-flex justify-content-between">
+  <p mat-dialog-title>{{ data?.title || 'confirmition' }}</p>
+  <button class="position-relative bottom-4" mat-icon-button (click)="onNoClick( )">
+    <mat-icon>close</mat-icon>
   </button>
+</div>
+<p mat-dialog-content>{{ data?.description }}</p>
+<mat-form-field cdkFocusInitial appearance="fill">
+  <input (keyup.enter)="onNoClick()" [(ngModel)]="data.value" required type="text" matInput>
+</mat-form-field>
+<div mat-dialog-actions align="end" class="mt-4">
+  <button cdkFocusInitial mat-flat-button (click)="onNoClick( )">{{ data.confirm }}</button>
 </div>

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IPromptPopup } from '../popup.manager';
 
 @Component({
@@ -8,15 +8,15 @@ import { IPromptPopup } from '../popup.manager';
   styleUrls: ['./prompt.component.scss']
 })
 export class PromptComponent implements OnInit {
-  public data: IPromptPopup = null;
   constructor(
-    private readonly ref: MatDialogRef<any>
+    private readonly dialogRef: MatDialogRef<PromptComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: IPromptPopup,
   ) { }
 
   ngOnInit() { }
 
-  close() {
-    this.ref.close(this.data.value.trim());
+  onNoClick(): void {
+    this.dialogRef.close(this.data.value.trim());
   }
 
 }

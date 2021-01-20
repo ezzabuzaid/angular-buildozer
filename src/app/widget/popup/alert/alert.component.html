@@ -1,9 +1,10 @@
-<div class="d-flex flex-column">
-  <h5 class="text-left">{{ data?.title || '' }}</h5>
+<div class="d-flex justify-content-between">
+  <p mat-dialog-title>{{ data?.title || 'confirmition' }}</p>
+  <button class="position-relative bottom-4" mat-icon-button (click)="onNoClick(false)">
+    <mat-icon>close</mat-icon>
+  </button>
 </div>
-<div class="text-left" mat-dialog-content>
-  <p>{{ data?.description }}</p>
-</div>
-<div mat-dialog-actions class="text-left">
-  <button class="text-white" mat-flat-button mat-dialog-close cdkFocusInitial color="accent">Close</button>
+<p mat-dialog-content>{{ data?.description }}</p>
+<div mat-dialog-actions align="end" class="mt-4">
+  <button cdkFocusInitial mat-flat-button (click)="onNoClick(false)">{{ data.close }}</button>
 </div>

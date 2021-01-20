@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IConfirmPopup } from '../popup.manager';
 
 @Component({
@@ -8,10 +8,9 @@ import { IConfirmPopup } from '../popup.manager';
   styleUrls: ['./confirm.component.scss']
 })
 export class ConfirmComponent implements OnInit {
-  result = null;
-  public data: IConfirmPopup;
-
+  public result = null;
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: IConfirmPopup,
     public dialogRef: MatDialogRef<ConfirmComponent>,
   ) { }
 
@@ -21,5 +20,6 @@ export class ConfirmComponent implements OnInit {
   }
 
   ngOnInit() { }
+
 
 }

@@ -12,13 +12,11 @@ export class PopupManager {
   ) { }
 
   alert(config: MatDialogConfig<PopupData> = {}) {
-    return this.dialog.open<AlertComponent, PopupData>(AlertComponent, this.populateDialogConfig(config));
+    return this.dialog.open<AlertComponent, PopupData, void>(AlertComponent, this.populateDialogConfig(config));
   }
 
   prompt(config: MatDialogConfig<IPromptPopup> = {}) {
-    const componentRef = this.dialog.open<PromptComponent, PopupData, string>(PromptComponent, this.populateDialogConfig(config));
-    componentRef.componentInstance.data = config.data || {};
-    return componentRef;
+    return this.dialog.open<PromptComponent, PopupData, string>(PromptComponent, this.populateDialogConfig(config));
   }
 
   confirm(config: MatDialogConfig<IConfirmPopup> = {}) {
@@ -36,7 +34,9 @@ export interface PopupData {
   description?: string;
 }
 
-
+export interface IAlertPopup extends PopupData {
+  close?: string;
+}
 export interface IConfirmPopup extends PopupData {
   close?: string;
   confirm?: string;
