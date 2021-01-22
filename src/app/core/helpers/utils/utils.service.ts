@@ -126,15 +126,6 @@ export class AppUtils {
         return string;
     }
 
-    static flattenArray(ary: any[]) {
-        return ary.reduce((a, b) => {
-            if (Array.isArray(b)) {
-                return a.concat(AppUtils.flattenArray(b));
-            }
-            return a.concat(b);
-        }, []);
-    }
-
     /**
      * Encode file to base 64 text format
      */
