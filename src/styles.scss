@@ -17,8 +17,26 @@ $typography: mat-typography-config(
     border-radius: 0 !important;
   }
 }
+
 .iti__selected-flag {
   &:focus {
     outline: none !important;
+  }
+}
+
+.mat-form-field-appearance-outline {
+  .mat-form-field-wrapper {
+    margin: 0 !important;
+    padding-bottom: 15px !important;
+  }
+  .mat-form-field-infix {
+    padding: 0.8em 0 !important;
+    border-top: 0.4em solid transparent !important;
+  }
+  .mat-form-field-flex {
+    margin-top: 2px;
+  }
+  .mat-select-arrow-wrapper {
+    transform: unset !important;
   }
 }
