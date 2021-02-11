@@ -1,18 +1,24 @@
-import { Directive, HostListener } from '@angular/core';
+import { Directive, ElementRef, Input, OnInit } from '@angular/core';
 
 @Directive({
     selector: '[prevent-defaults]'
 })
-export class PreventDefaultsDirective {
+// FIXME: Rename it to prevents-bubbling
+export class PreventDefaultsDirective implements OnInit {
+    @Input('prevent-defaults') eventsNames: any = [];
 
-    static preventDefault(event: Event) {
-        // event.preventDefault();
-        event.stopPropagation();
+    constructor(
+        private elementRef: ElementRef<HTMLElement>
+    ) { }
+
+    ngOnInit(): void {
+        [...this.eventsNames, 'click'].forEach((eventName) => {
+            this.elementRef.nativeElement
+                .addEventListener(eventName, (event) => {
+                    event.stopPropagation();
+                });
+        });
     }
 
-    @HostListener('click', ['$event'])
-    onClick(event: MouseEvent) {
-        PreventDefaultsDirective.preventDefault(event);
-    }
 
 }

@@ -1,10 +1,10 @@
 <div class="d-flex justify-content-between">
   <p mat-dialog-title>{{ data?.title || 'confirmition' }}</p>
-  <button class="position-relative bottom-4" mat-icon-button (click)="onNoClick(false)">
+  <button class="position-relative bottom-4" mat-icon-button (click)="onNoClick()">
     <mat-icon>close</mat-icon>
   </button>
 </div>
 <p mat-dialog-content>{{ data?.description }}</p>
 <div mat-dialog-actions align="end" class="mt-4">
-  <button cdkFocusInitial mat-flat-button (click)="onNoClick(false)">{{ data.close }}</button>
+  <button cdkFocusInitial mat-flat-button (click)="onNoClick()">{{ data.close || 'Close' }}</button>
 </div>
