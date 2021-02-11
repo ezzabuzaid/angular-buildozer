@@ -10,7 +10,7 @@ interface Array<T> {
 Object.defineProperty(Array.prototype, 'deepFlat', {
     configurable: false,
     enumerable: true,
-    value: function () {
+    value() {
         function flattenArray(data: any[]) {
             return data.reduce((a, b) => {
                 if (Array.isArray(b)) {

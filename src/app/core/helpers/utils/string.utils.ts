@@ -16,22 +16,19 @@ export class StringUtils {
     /**
      * Convert HTML-entites to text character
      */
-    static decodeHtmlEntites() {
-        return function (string) {
-            return (string + "").replace(/&#\d+;/gm, (s) => {
-                return String.fromCharCode(+s.match(/\d+/gm)[0]);
-            })
-
-        }
+    static decodeHtmlEntites(value: string) {
+        return (value + '').replace(/&#\d+;/gm, (s) => {
+            return String.fromCharCode(+s.match(/\d+/gm)[0]);
+        });
 
     }
 
     /**
      * Convert HTML-text reserved character to entites
      */
-    static endcodeHtmlEntites(string) {
-        return string.replace(/./gm, (s) => {
-            return "&#" + s.charCodeAt(0) + ";";
+    static endcodeHtmlEntites(value: string) {
+        return value.replace(/./gm, (s) => {
+            return '&#' + s.charCodeAt(0) + ';';
         });
     }
 
@@ -57,7 +54,7 @@ export class StringUtils {
      */
     static isUrl(value: string): boolean {
         try {
-            return !!new URL(value)
+            return !!new URL(value);
         } catch (error) {
             return false;
         }

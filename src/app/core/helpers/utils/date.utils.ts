@@ -37,4 +37,12 @@ export class DateUtils {
     static dateElapsed(date: number) {
         return date < Date.now();
     }
+
+    static isDateValue(value: any) {
+        return isNaN(Number(value)) && !isNaN(Date.parse(value));
+    }
+
+    static localIsoDate(date?: Date) {
+        return new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
+    }
 }

@@ -17,7 +17,7 @@ export class AppUtils {
 
     /**
      * Check if the value has at least one item
-     * 
+     *
      * supported values are string, array, pojo {}
      * @returns {boolean} indicate that the {value} is empty
      */
