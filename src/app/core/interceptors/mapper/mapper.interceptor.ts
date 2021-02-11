@@ -19,8 +19,7 @@ export class MapperInterceptor implements HttpInterceptor {
             .pipe(
                 map((response) => {
                     const fullResponse = this.requestData.get(request, 'FULL_RESPONSE');
-                    const defaultUrl = this.requestData.get(request, 'DEFAULT_URL');
-                    if (response instanceof HttpResponse && defaultUrl && AppUtils.not(fullResponse)) {
+                    if (response instanceof HttpResponse && AppUtils.not(fullResponse)) {
                         return response.clone({ body: response.body.data });
                     }
                     return response;

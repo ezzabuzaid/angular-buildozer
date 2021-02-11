@@ -34,7 +34,7 @@ describe(`CacheInterceptor`, () => {
 
         // Act
         httpClient
-            .configure({ LOCAL_CACHE: false })
+            .configure({ CACHE: null })
             .delete('http://test.com/api/users')
             .subscribe();
 
@@ -55,8 +55,7 @@ describe(`CacheInterceptor`, () => {
         // Act
         httpClient
             .configure({
-                LOCAL_CACHE: true,
-                CACHE_CATEGORY
+                CACHE: null,
             })
             .get('http://test.com/api')
             .subscribe();
@@ -81,9 +80,9 @@ describe(`CacheInterceptor`, () => {
         // Act
         httpClient
             .configure({
-                DEFAULT_URL: false,
-                LOCAL_CACHE: true,
-                CACHE_CATEGORY: AppUtils.generateAlphabeticString()
+                CACHE: {
+                    category: AppUtils.generateAlphabeticString()
+                }
             })
             .get(url)
             .subscribe();
@@ -112,8 +111,6 @@ describe(`CacheInterceptor`, () => {
         TestBed
             .inject(HttpClient)
             .configure({
-                LOCAL_CACHE: true,
-                CACHE_CATEGORY: AppUtils.generateAlphabeticString()
             })
             .get(url)
             .subscribe((response) => {

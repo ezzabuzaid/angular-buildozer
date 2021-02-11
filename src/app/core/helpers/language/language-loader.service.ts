@@ -16,7 +16,6 @@ export class LanguageLoader implements TranslateLoader {
         const languageService = this.injector.get(LanguageService);
         return http
             .configure({
-                DEFAULT_URL: false,
                 CACHE: environment.production
                     ? { category: 'language' }
                     : null,

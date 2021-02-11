@@ -21,14 +21,14 @@ describe(`UrlInterceptor`, () => {
     });
 
 
-    it('should prefix the incoming url with the url from the environment when DEFAULT_URL flag is true', fakeAsync(() => {
+    it('should prefix the incoming url with the url from the environment when the url does not start with http or https', fakeAsync(() => {
         // Arrange
         const http = TestBed.inject(HttpClient);
         const httpMock = TestBed.inject(HttpTestingController);
         const urlPortion = AppUtils.generateAlphabeticString();
 
         // Act
-        http.configure({ DEFAULT_URL: true }).get(urlPortion).subscribe();
+        http.get(urlPortion).subscribe();
         flush();
 
         // Assert
@@ -36,19 +36,34 @@ describe(`UrlInterceptor`, () => {
         expect(request.url).toMatch(apiUrl(urlPortion));
     }));
 
-    it('should send the request as it is without any modification when DEFAULT_URL flag is false', fakeAsync(() => {
+    it('should not modify any url starts with http', fakeAsync(() => {
         // Arrange
         const http = TestBed.inject(HttpClient);
         const httpMock = TestBed.inject(HttpTestingController);
-        const urlPortion = AppUtils.generateAlphabeticString();
+        const url = `http://${ AppUtils.generateAlphabeticString() }`;
 
         // Act
-        http.configure({ DEFAULT_URL: false }).get(urlPortion).subscribe();
+        http.get(url).subscribe();
         flush();
 
         // Assert
-        const { request } = httpMock.expectOne(urlPortion);
-        expect(request.url).toMatch(urlPortion);
+        const { request } = httpMock.expectOne(url);
+        expect(request.url).toMatch(url);
+    }));
+
+    it('should not modify any url starts with https', fakeAsync(() => {
+        // Arrange
+        const http = TestBed.inject(HttpClient);
+        const httpMock = TestBed.inject(HttpTestingController);
+        const url = `https://${ AppUtils.generateAlphabeticString() }`;
+
+        // Act
+        http.get(url).subscribe();
+        flush();
+
+        // Assert
+        const { request } = httpMock.expectOne(url);
+        expect(request.url).toMatch(url);
     }));
 
     afterAll(() => {

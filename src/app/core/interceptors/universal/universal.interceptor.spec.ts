@@ -41,12 +41,10 @@ describe(`UniversalInterceptor`, () => {
             const secureUrl = 'https://test.com/api/users';
 
             httpClient
-                .configure({ DEFAULT_URL: false })
                 .get(httpURL)
                 .subscribe();
 
             httpClient
-                .configure({ DEFAULT_URL: false })
                 .get(secureUrl)
                 .subscribe();
 
@@ -60,7 +58,6 @@ describe(`UniversalInterceptor`, () => {
             const protocolRelativeURL = '//test.com/api/users';
 
             httpClient
-                .configure({ DEFAULT_URL: false })
                 .get(protocolRelativeURL)
                 .subscribe();
 
@@ -77,16 +74,14 @@ describe(`UniversalInterceptor`, () => {
             const httpClient = TestBed.inject(HttpClient);
             const httpMock = TestBed.inject(HttpTestingController);
             const firstRelative = 'api/users';
-            const firstAbsolute = `${protocol}://${host}/${firstRelative}`;
+            const firstAbsolute = `${ protocol }://${ host }/${ firstRelative }`;
             const secondRelative = '/api/accounts';
-            const secondAbsolute = `${protocol}://${host}${secondRelative}`;
+            const secondAbsolute = `${ protocol }://${ host }${ secondRelative }`;
 
             httpClient
-                .configure({ DEFAULT_URL: false })
                 .get(firstRelative)
                 .subscribe();
             httpClient
-                .configure({ DEFAULT_URL: false })
                 .get(secondRelative)
                 .subscribe();
 

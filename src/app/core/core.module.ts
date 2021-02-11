@@ -5,7 +5,7 @@ import { AsyncDatabase, IndexedDB } from '@ezzabuzaid/document-storage';
 import { RequestOptionsModule } from '@ezzabuzaid/ngx-request-options';
 import { IRequestOptions } from '@shared/common';
 import { CACHE_DATABASE } from './helpers/cache';
-import { AppUtils } from './helpers/utils';
+import { AppUtils, DateUtils } from './helpers/utils';
 import { CacheInterceptor } from './interceptors/cache/cache.interceptor';
 import { CancellationInterceptor } from './interceptors/cancellation/cancellation.interceptor';
 import { ConnectivityInterceptor } from './interceptors/connectivity/connectivity.interceptor';
@@ -21,15 +21,15 @@ import { UrlInterceptor } from './interceptors/url/url.interceptor';
   imports: [
     CommonModule,
     RequestOptionsModule.forRoot<IRequestOptions>({
-      DEFAULT_URL: true,
       SNACKBAR: false,
       PROGRESS_BAR: true,
       FORM_PROGRESS_BAR: true,
       FULL_RESPONSE: false,
       CACHE: {
+        // TODO: Take the new one from crm
         category: 'local_cache',
         // provider: CACHE_DATABASE,
-        ttl: AppUtils.duration(60)
+        ttl: DateUtils.duration(60)
       }
     }),
   ],

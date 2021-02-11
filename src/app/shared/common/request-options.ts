@@ -1,11 +1,4 @@
-import { InjectionToken } from '@angular/core';
-import { AsyncStorage } from '@ezzabuzaid/document-storage';
-
 export interface IRequestOptions {
-    /**
-     * Weather if the request should prefixed the request url with the default
-     */
-    DEFAULT_URL: boolean;
     /**
      * Weather to show response message in a snackbar
      */
