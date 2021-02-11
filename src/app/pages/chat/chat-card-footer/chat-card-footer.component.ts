@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { TokenHelper } from '@core/helpers/token';
-import { AppUtils } from '@core/helpers/utils';
+import { AppUtils, StringUtils } from '@core/helpers/utils';
 import * as EmojiButton from '@joeattardi/emoji-button';
 import { ChatModel } from '@shared/models';
 import { MediaHubManager } from 'app/pages/media-hub/media-hub.manager';
@@ -51,7 +51,6 @@ export class ChatCardFooterComponent implements OnInit {
   }
 
   openEmojiPicker(event) {
-    AppUtils.preventBubblingAndCapturing(event);
     this.emojiPicker.showPicker(this.element);
   }
 
@@ -63,7 +62,7 @@ export class ChatCardFooterComponent implements OnInit {
   }
 
   sendMessage() {
-    if (AppUtils.hasItemWithin(this.files)) {
+    if (AppUtils.notEmpty(this.files)) {
       for (const file of this.files) {
         this.chatManager.sendLocalMessage(this.createFileMessage(file));
       }
@@ -123,7 +122,7 @@ export class ChatCardFooterComponent implements OnInit {
   openMediaPicker() {
     this.mediaHubManager.openMediaPicker(this.room._id)
       .afterClosed()
-      .pipe(filter(AppUtils.hasItemWithin))
+      .pipe(filter(AppUtils.notEmpty))
       .subscribe((files) => {
         files.forEach(file => {
           this.chatManager.sendLocalMessage(this.createMessage(file.path));
@@ -137,7 +136,7 @@ export class ChatCardFooterComponent implements OnInit {
   }
 
   isImage(type: string) {
-    return AppUtils.isImage(type);
+    return StringUtils.isImage(type);
   }
 
   hideActionBar() {

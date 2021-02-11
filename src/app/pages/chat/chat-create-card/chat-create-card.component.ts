@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AppUtils, typeaheadOperator } from '@core/helpers/utils';
+import { AppUtils, StringUtils, typeaheadOperator } from '@core/helpers/utils';
 import { ChatModel, UsersModel } from '@shared/models';
 import { ChatService } from '@shared/services/chat';
 import { UsersService } from '@shared/services/users';
@@ -41,7 +41,7 @@ export class ChatCreateCardComponent implements OnInit, IChatCard<any> {
 
   ngOnInit() {
     this.$users = (this.autocompleteControl.valueChanges as Observable<string>).pipe(
-      filter(AppUtils.hasItemWithin),
+      filter(AppUtils.notEmpty),
       typeaheadOperator(),
       switchMap((value) => this.usersService.searchForUsers(value)),
       map(users => users.filter(user => {
@@ -83,7 +83,7 @@ export class ChatCreateCardComponent implements OnInit, IChatCard<any> {
       .afterClosed()
       .pipe(
         switchMap((name) => {
-          if (AppUtils.isEmptyString(name)) {
+          if (StringUtils.isEmptyString(name)) {
             this.snackbar.open('Please enter name');
             return of(null);
           }

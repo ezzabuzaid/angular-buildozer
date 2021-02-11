@@ -1,50 +1,10 @@
 import { MonoTypeOperatorFunction, Observable, Observer, of, Subject, throwError } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
+import { StringUtils } from './string.utils';
+
+// FIXME: Rename it to app.utils
 export class AppUtils {
 
-    /**
-     * Checks if the givin value is url
-     */
-    static isUrl(value: string): boolean {
-        try {
-            return AppUtils.isTruthy(new URL(value));
-        } catch (error) {
-            return false;
-        }
-    }
-
-    /**
-     * Check if the type is image
-     *
-     * @param type file mimetypes like jpg jpg jpeg png bmp gif
-     */
-    public static isImage(type: string) {
-        return /(\.jpg|\.png|\.bmp|\.gif|\.jpeg)$/i.test(type);
-    }
-
-    /**
-     * Check if the givin value is file type
-     * File type includes the images
-     */
-    public static isFile(type: string) {
-        return AppUtils.isImage(type) || AppUtils.isPdf(type);
-    }
-
-    /**
-     * Check if the type is pdf type
-     */
-    public static isPdf(type: string) {
-        return /(.pdf|application\/pdf)/.test(type);
-    }
-
-    /**
-     * checks if the value is string or not if so it will return true if it has at least one char
-     * NOTE: the value will be trimmed before the evaluation
-     * @param value to be checked
-     */
-    public static isEmptyString(value: string): boolean {
-        return typeof value !== 'string' || value.trim() === '';
-    }
     /**
      * check if the givin value is object literal
      *
@@ -54,22 +14,31 @@ export class AppUtils {
         return new Object(value) === value;
     }
 
+
     /**
      * Check if the value has at least one item
-     *
-     * @param object any series value
-     * @returns indicate that the {value} is empty
+     * 
+     * supported values are string, array, pojo {}
+     * @returns {boolean} indicate that the {value} is empty
      */
-    public static hasItemWithin(object: any): boolean {
+    public static notEmpty(object: any): boolean {
         if (Array.isArray(object)) {
             return AppUtils.isTruthy(object.length);
+        }
+
+        if (object instanceof Date) {
+            return true;
+        }
+
+        if (typeof object === 'boolean') {
+            return true;
         }
 
         if (AppUtils.isObject(object)) {
             return AppUtils.isTruthy(Object.keys(object).length);
         }
 
-        return AppUtils.isFalsy(AppUtils.isEmptyString(object));
+        return AppUtils.not(StringUtils.isEmptyString(object));
     }
 
     /**
@@ -79,9 +48,8 @@ export class AppUtils {
      * @param object any series value
      */
     static isEmpty(value: any): boolean {
-        return AppUtils.isFalsy(AppUtils.hasItemWithin(value));
+        return AppUtils.isFalsy(AppUtils.notEmpty(value));
     }
-
 
     /**
      * generate a random alphapetic string
@@ -191,43 +159,6 @@ export class AppUtils {
             }, []);
     }
 
-    static duration(minutes: number) {
-        const date = new Date();
-        date.setMinutes(date.getMinutes() + minutes);
-        return date.getTime();
-    }
-
-    /**
-     * Convert numeric days to seconds
-     */
-    static daysToSeconds(days: number) {
-        const d = new Date();
-        const a = new Date();
-        a.setDate(a.getDate() + days);
-        return a.getTime() - d.getTime();
-    }
-
-    /**
-     * Convert minutes to seconds
-     */
-    static minutesToSeconds(minutes: number) {
-        const d = new Date();
-        const a = new Date();
-        a.setMinutes(a.getMinutes() + minutes);
-        return a.getTime() - d.getTime();
-    }
-
-    /**
-     * Check if the specicifed date elapsed the {maxAge}
-     *
-     * If max age not provided the current date will be used instead
-     *
-     * @param date the date to check
-     * @param maxAge default to current date
-     */
-    static dateElapsed(date: number) {
-        return date < Date.now();
-    }
 
     /**
      * merge and return unique list from two lists
@@ -235,10 +166,6 @@ export class AppUtils {
      */
     static mergeListOfObjects<T>(concatTo: Partial<T>[], filterFrom: Partial<T>[], key: keyof T) {
         return concatTo.concat(filterFrom.filter(one => !concatTo.find(two => two[key] === one[key])));
-    }
-
-    static strictText(text: string, count: number, insertDots = true) {
-        return text.slice(0, count) + (((text.length > count) && insertDots) ? '&hellip;' : '');
     }
 
     static flatArray(data: any[]) {
@@ -285,7 +212,7 @@ export class AppUtils {
     static excludeEmptyKeys(object: object, withEmptyString = false) {
         const replaceUndefinedOrNull = (key: string, value: any) => {
             if (withEmptyString) {
-                return this.isEmptyString(value) || this.isNullorUndefined(value)
+                return StringUtils.isEmptyString(value) || this.isNullorUndefined(value)
                     ? undefined
                     : value;
             } else {
@@ -293,43 +220,6 @@ export class AppUtils {
             }
         };
         return JSON.parse(JSON.stringify(object, replaceUndefinedOrNull));
-    }
-
-    static toTimestamp(date = new Date()) {
-        return new Date(date).getTime();
-    }
-
-    static isEllipsisActivated(element: HTMLElement) {
-        const tolerance = 2;
-        return element.offsetWidth + tolerance < element.scrollWidth;
-    }
-
-    static replaceLineBrecksWithHTMLTag(text: string) {
-        return text.replace(/\r?\n/g, '<br />');
-    }
-
-    static stripText(text: string, count: number, insertDots = true) {
-        return text.slice(0, count) + (((text.length > count) && insertDots) ? '&hellip;' : '');
-    }
-
-    static replaceTextCharToHTMLentity(text: string) {
-        const entityMap = {
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            '"': '&quot;',
-            '\'': '&#39;',
-            '/': '&#x2F;'
-        };
-        return String(text).replace(/[&<>"'\/]/g, (s) => entityMap[s]);
-    }
-
-    static capitalizeFirstLetter(name: string) {
-        return name.replace(/^\w/, c => c.toUpperCase());
-    }
-
-    static removeLastChar(name: string) {
-        return name.substring(name.length - 1, 0);
     }
 
     /**
@@ -383,9 +273,6 @@ export class AppUtils {
         return !value;
     }
 
-    static pascalCase(value: string) {
-        return value?.split(' ').map(AppUtils.capitalizeFirstLetter).join('');
-    }
 
 }
 
